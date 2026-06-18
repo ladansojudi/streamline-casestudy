@@ -1,0 +1,14 @@
+[
+  { "id": "ac_1", "audience": "editor", "icon": "returned", "text": "Publisher returned Wednesday · S1 · E04 with 2 comments", "time": "2h ago", "tone": "warning" },
+  { "id": "ac_2", "audience": "editor", "icon": "ready", "text": "The Witcher · S3 · E01 finished processing and is ready", "time": "3h ago", "tone": "success" },
+  { "id": "ac_3", "audience": "editor", "icon": "submitted", "text": "You submitted Wednesday · S1 · E05 for review", "time": "5h ago", "tone": "default" },
+  { "id": "ac_4", "audience": "editor", "icon": "failed", "text": "Upload failed for Money Heist · Part 5 · E07 — resume available", "time": "6h ago", "tone": "warning" },
+  { "id": "ac_5", "audience": "editor", "icon": "approved", "text": "Publisher approved Dark · S3 · E08", "time": "1d ago", "tone": "success" },
+  { "id": "ac_6", "audience": "editor", "icon": "upload", "text": "You started 3 uploads in the background", "time": "1d ago", "tone": "default" },
+
+  { "id": "ac_7", "audience": "publisher", "icon": "approved", "text": "You approved Dark · S3 · E08 — scheduled for Jun 13", "time": "25m ago", "tone": "success" },
+  { "id": "ac_8", "audience": "publisher", "icon": "returned", "text": "You returned Wednesday · S1 · E04 with 2 fix notes", "time": "2h ago", "tone": "warning" },
+  { "id": "ac_9", "audience": "publisher", "icon": "submitted", "text": "Eren Y. submitted Wednesday · S1 · E05 for review", "time": "20m ago", "tone": "default" },
+  { "id": "ac_10", "audience": "publisher", "icon": "approved", "text": "You approved The Crown · S6 · E04 in one pass", "time": "4h ago", "tone": "success" },
+  { "id": "ac_11", "audience": "publisher", "icon": "comment", "text": "You pinned 2 comments on Money Heist · Part 5 · E08", "time": "6h ago", "tone": "default" }
+]

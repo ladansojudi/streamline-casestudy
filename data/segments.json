@@ -1,0 +1,67 @@
+[
+  {
+    "id": "seg_all",
+    "name": "All viewers",
+    "kind": "fallback",
+    "description": "Default fallback shown when no other segment rule matches.",
+    "reachPercent": 100,
+    "members": "All accounts",
+    "art": "from-slate-600 to-slate-800",
+    "rules": [],
+    "createdBy": "system"
+  },
+  {
+    "id": "seg_latam",
+    "name": "LATAM",
+    "kind": "region",
+    "description": "Spanish and Portuguese speaking markets across Latin America.",
+    "reachPercent": 18,
+    "members": "12.4M accounts",
+    "art": "from-rose-500 to-orange-600",
+    "rules": [
+      { "field": "Country", "op": "is one of", "value": "MX, BR, AR, CO, CL" },
+      { "field": "Language", "op": "is", "value": "es, pt" }
+    ],
+    "createdBy": "u_eren"
+  },
+  {
+    "id": "seg_apac",
+    "name": "APAC",
+    "kind": "region",
+    "description": "Asia-Pacific markets with localized key art preferences.",
+    "reachPercent": 23,
+    "members": "15.9M accounts",
+    "art": "from-indigo-500 to-violet-700",
+    "rules": [
+      { "field": "Country", "op": "is one of", "value": "JP, KR, IN, ID, AU" }
+    ],
+    "createdBy": "u_priya"
+  },
+  {
+    "id": "seg_newcomers",
+    "name": "New subscribers",
+    "kind": "behavior",
+    "description": "Accounts created in the last 30 days — surface broad, recognizable art.",
+    "reachPercent": 7,
+    "members": "4.8M accounts",
+    "art": "from-emerald-500 to-teal-700",
+    "rules": [
+      { "field": "Account age", "op": "is under", "value": "30 days" }
+    ],
+    "createdBy": "u_maya"
+  },
+  {
+    "id": "seg_thriller",
+    "name": "Thriller fans",
+    "kind": "taste",
+    "description": "High affinity for thriller and suspense — lean into tense, dark key art.",
+    "reachPercent": 31,
+    "members": "21.3M accounts",
+    "art": "from-amber-500 to-red-700",
+    "rules": [
+      { "field": "Taste cluster", "op": "includes", "value": "Thriller, Suspense" },
+      { "field": "Watch history", "op": "contains", "value": "3+ thrillers / 90d" }
+    ],
+    "createdBy": "u_priya"
+  }
+]

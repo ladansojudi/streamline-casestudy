@@ -1,0 +1,7 @@
+[
+  { "id": "up_1", "episodeId": "e_st_s4e09", "state": "uploading", "progress": 72, "size": "92.2 GB", "format": "ProRes 4444", "speed": "134 Mbps" },
+  { "id": "up_2", "episodeId": "e_wit_s3e01", "state": "processing", "progress": 100, "size": "71.0 GB", "format": "IMF package", "speed": "—" },
+  { "id": "up_3", "episodeId": "e_mh_p5e07", "state": "failed", "progress": 34, "size": "22.4 GB", "format": "ProRes 422", "speed": "—", "reason": "Connection lost" },
+  { "id": "up_4", "episodeId": "e_wed_s1e06", "state": "failed", "progress": 18, "size": "46.7 GB", "format": "ProRes 4444", "speed": "—", "reason": "Server error during transcode" },
+  { "id": "up_5", "episodeId": "e_st_s4e07", "state": "complete", "progress": 100, "size": "61.4 GB", "format": "ProRes 4444", "speed": "—" }
+]

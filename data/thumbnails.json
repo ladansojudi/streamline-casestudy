@@ -1,0 +1,12 @@
+[
+  { "id": "th_st_default", "titleId": "t_stranger", "segmentId": "seg_all", "rulePriority": 0 },
+  { "id": "th_st_latam", "titleId": "t_stranger", "segmentId": "seg_latam", "rulePriority": 1 },
+  { "id": "th_st_apac", "titleId": "t_stranger", "segmentId": "seg_apac", "rulePriority": 2 },
+  { "id": "th_wed_default", "titleId": "t_wednesday", "segmentId": "seg_all", "rulePriority": 0 },
+  { "id": "th_wed_thriller", "titleId": "t_wednesday", "segmentId": "seg_thriller", "rulePriority": 1 },
+  { "id": "th_dark_default", "titleId": "t_dark", "segmentId": "seg_all", "rulePriority": 0 },
+  { "id": "th_dark_newcomers", "titleId": "t_dark", "segmentId": "seg_newcomers", "rulePriority": 1 },
+  { "id": "th_crown_default", "titleId": "t_crown", "segmentId": "seg_all", "rulePriority": 0 },
+  { "id": "th_mh_default", "titleId": "t_money_heist", "segmentId": "seg_all", "rulePriority": 0 },
+  { "id": "th_mh_latam", "titleId": "t_money_heist", "segmentId": "seg_latam", "rulePriority": 1 }
+]

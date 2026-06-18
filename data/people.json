@@ -1,0 +1,38 @@
+[
+  {
+    "id": "u_eren",
+    "name": "Eren Y.",
+    "firstName": "Eren",
+    "initials": "EY",
+    "email": "eren@insiderone.com",
+    "role": "editor",
+    "tagline": "Fast, goal-oriented, under deadline pressure"
+  },
+  {
+    "id": "u_maya",
+    "name": "Maya R.",
+    "firstName": "Maya",
+    "initials": "MR",
+    "email": "maya@insiderone.com",
+    "role": "publisher",
+    "tagline": "Detail-oriented quality gatekeeper"
+  },
+  {
+    "id": "u_priya",
+    "name": "Priya N.",
+    "firstName": "Priya",
+    "initials": "PN",
+    "email": "priya@insiderone.com",
+    "role": "editor",
+    "tagline": "Series specialist"
+  },
+  {
+    "id": "u_sam",
+    "name": "Sam K.",
+    "firstName": "Sam",
+    "initials": "SK",
+    "email": "sam@insiderone.com",
+    "role": "editor",
+    "tagline": "Film finishing"
+  }
+]

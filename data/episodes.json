@@ -1,0 +1,335 @@
+[
+  {
+    "id": "e_st_s4e07",
+    "titleId": "t_stranger",
+    "seasonId": "se_stranger_4",
+    "season": 4,
+    "episode": 7,
+    "label": "S4 · E07",
+    "code": "EP407",
+    "episodeTitle": "The Massacre at Hawkins Lab",
+    "file": "ST_S04E07_master.mov",
+    "size": "61.4 GB",
+    "status": "published",
+    "uploadProgress": 100,
+    "assets": {
+      "video": true,
+      "audio": true,
+      "subtitles": true,
+      "captions": true,
+      "thumbnail": true
+    },
+    "missing": [],
+    "updated": "2d ago",
+    "releaseDate": "2026-06-10"
+  },
+  {
+    "id": "e_st_s4e08",
+    "titleId": "t_stranger",
+    "seasonId": "se_stranger_4",
+    "season": 4,
+    "episode": 8,
+    "label": "S4 · E08",
+    "code": "EP408",
+    "episodeTitle": "Papa",
+    "file": "ST_S04E08_master.mov",
+    "size": "58.9 GB",
+    "status": "ready",
+    "uploadProgress": 100,
+    "assets": {
+      "video": true,
+      "audio": true,
+      "subtitles": true,
+      "captions": false,
+      "thumbnail": true
+    },
+    "missing": [
+      "Captions"
+    ],
+    "updated": "1d ago",
+    "releaseDate": null
+  },
+  {
+    "id": "e_st_s4e09",
+    "titleId": "t_stranger",
+    "seasonId": "se_stranger_4",
+    "season": 4,
+    "episode": 9,
+    "label": "S4 · E09",
+    "code": "EP409",
+    "episodeTitle": "The Piggyback",
+    "file": "ST_S04E09_master.mov",
+    "size": "92.2 GB",
+    "status": "uploading",
+    "uploadProgress": 72,
+    "assets": {
+      "video": true,
+      "audio": true,
+      "subtitles": false,
+      "captions": false,
+      "thumbnail": true
+    },
+    "missing": [
+      "Subtitles",
+      "Captions"
+    ],
+    "updated": "12m ago",
+    "releaseDate": null
+  },
+  {
+    "id": "e_wed_s1e04",
+    "titleId": "t_wednesday",
+    "seasonId": "se_wednesday_1",
+    "season": 1,
+    "episode": 4,
+    "label": "S1 · E04",
+    "code": "EP104",
+    "episodeTitle": "Woe What a Night",
+    "file": "WED_S01E04_master.mov",
+    "size": "47.0 GB",
+    "status": "changes",
+    "uploadProgress": 100,
+    "assets": {
+      "video": true,
+      "audio": true,
+      "subtitles": true,
+      "captions": false,
+      "thumbnail": true
+    },
+    "missing": [
+      "Audio mix",
+      "Captions"
+    ],
+    "updated": "2h ago",
+    "releaseDate": null
+  },
+  {
+    "id": "e_wed_s1e05",
+    "titleId": "t_wednesday",
+    "seasonId": "se_wednesday_1",
+    "season": 1,
+    "episode": 5,
+    "label": "S1 · E05",
+    "code": "EP105",
+    "episodeTitle": "You Reap What You Woe",
+    "file": "WED_S01E05_master.mov",
+    "size": "45.5 GB",
+    "status": "in-review",
+    "uploadProgress": 100,
+    "assets": {
+      "video": true,
+      "audio": true,
+      "subtitles": true,
+      "captions": true,
+      "thumbnail": true
+    },
+    "missing": [
+      "Cast",
+      "Maturity rating"
+    ],
+    "updated": "20m ago",
+    "releaseDate": null,
+    "submittedById": "u_eren",
+    "submittedAgo": "20m ago",
+    "priority": "high",
+    "reviewRuntime": "52:14"
+  },
+  {
+    "id": "e_wed_s1e06",
+    "titleId": "t_wednesday",
+    "seasonId": "se_wednesday_1",
+    "season": 1,
+    "episode": 6,
+    "label": "S1 · E06",
+    "code": "EP106",
+    "episodeTitle": "Quid Pro Woe",
+    "file": "WED_S01E06_master.mov",
+    "size": "46.7 GB",
+    "status": "uploading",
+    "uploadProgress": 18,
+    "assets": {
+      "video": false,
+      "audio": false,
+      "subtitles": false,
+      "captions": false,
+      "thumbnail": false
+    },
+    "missing": [
+      "Everything"
+    ],
+    "updated": "1d ago",
+    "releaseDate": null
+  },
+  {
+    "id": "e_wit_s3e01",
+    "titleId": "t_witcher",
+    "seasonId": "se_witcher_3",
+    "season": 3,
+    "episode": 1,
+    "label": "S3 · E01",
+    "code": "EP301",
+    "episodeTitle": "Shaerrawedd",
+    "file": "WIT_S03E01_master.mov",
+    "size": "71.0 GB",
+    "status": "ready",
+    "uploadProgress": 100,
+    "assets": {
+      "video": true,
+      "audio": true,
+      "subtitles": true,
+      "captions": true,
+      "thumbnail": false
+    },
+    "missing": [
+      "Cast",
+      "Thumbnail"
+    ],
+    "updated": "3h ago",
+    "releaseDate": null
+  },
+  {
+    "id": "e_mh_p5e07",
+    "titleId": "t_money_heist",
+    "seasonId": "se_money_heist_5",
+    "season": 5,
+    "episode": 7,
+    "label": "Part 5 · E07",
+    "code": "EP507",
+    "episodeTitle": "A Family Tradition",
+    "file": "MH_P05E07_master.mov",
+    "size": "22.4 GB",
+    "status": "uploading",
+    "uploadProgress": 34,
+    "assets": {
+      "video": false,
+      "audio": false,
+      "subtitles": false,
+      "captions": false,
+      "thumbnail": false
+    },
+    "missing": [
+      "Everything"
+    ],
+    "updated": "6m ago",
+    "releaseDate": null
+  },
+  {
+    "id": "e_mh_p5e08",
+    "titleId": "t_money_heist",
+    "seasonId": "se_money_heist_5",
+    "season": 5,
+    "episode": 8,
+    "label": "Part 5 · E08",
+    "code": "EP508",
+    "episodeTitle": "The Ballad of Tokyo",
+    "file": "MH_P05E08_master.mov",
+    "size": "23.1 GB",
+    "status": "in-review",
+    "uploadProgress": 100,
+    "assets": {
+      "video": true,
+      "audio": true,
+      "subtitles": true,
+      "captions": false,
+      "thumbnail": true
+    },
+    "missing": [
+      "Captions"
+    ],
+    "updated": "3h ago",
+    "releaseDate": "2026-06-27",
+    "submittedById": "u_eren",
+    "submittedAgo": "3h ago",
+    "priority": "high",
+    "reviewRuntime": "48:51"
+  },
+  {
+    "id": "e_squid_s1e09",
+    "titleId": "t_squid_game",
+    "seasonId": "se_squid_game_1",
+    "season": 1,
+    "episode": 9,
+    "label": "S1 · E09",
+    "code": "EP109",
+    "episodeTitle": "One Lucky Day",
+    "file": "SQUID_S01E09_master.mov",
+    "size": "62.5 GB",
+    "status": "in-review",
+    "uploadProgress": 100,
+    "assets": {
+      "video": true,
+      "audio": true,
+      "subtitles": false,
+      "captions": false,
+      "thumbnail": true
+    },
+    "missing": [
+      "Maturity rating",
+      "Subtitles"
+    ],
+    "updated": "1h ago",
+    "releaseDate": "2026-06-20",
+    "submittedById": "u_eren",
+    "submittedAgo": "1h ago",
+    "priority": "normal",
+    "reviewRuntime": "54:30"
+  },
+  {
+    "id": "e_dark_s3e08",
+    "titleId": "t_dark",
+    "seasonId": "se_dark_3",
+    "season": 3,
+    "episode": 8,
+    "label": "S3 · E08",
+    "code": "EP308",
+    "episodeTitle": "The Paradise",
+    "file": "DARK_S03E08_master.mov",
+    "size": "38.9 GB",
+    "status": "published",
+    "uploadProgress": 100,
+    "assets": {
+      "video": true,
+      "audio": true,
+      "subtitles": true,
+      "captions": true,
+      "thumbnail": true
+    },
+    "missing": [],
+    "updated": "1d ago",
+    "releaseDate": "2026-06-13",
+    "submittedById": "u_sam",
+    "submittedAgo": "2h ago",
+    "priority": "normal",
+    "reviewRuntime": "53:02"
+  },
+  {
+    "id": "e_crown_s6e04",
+    "titleId": "t_crown",
+    "seasonId": "se_crown_6",
+    "season": 6,
+    "episode": 4,
+    "label": "S6 · E04",
+    "code": "EP604",
+    "episodeTitle": "Aftermath",
+    "file": "CROWN_S06E04_master.mov",
+    "size": "41.2 GB",
+    "status": "ready",
+    "uploadProgress": 100,
+    "assets": {
+      "video": true,
+      "audio": true,
+      "subtitles": true,
+      "captions": false,
+      "thumbnail": true
+    },
+    "missing": [
+      "Captions"
+    ],
+    "updated": "5h ago",
+    "releaseDate": null,
+    "submittedById": "u_sam",
+    "submittedAgo": "5h ago",
+    "priority": "normal",
+    "reviewRuntime": "58:11"
+  }
+]

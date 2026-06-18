@@ -1,0 +1,74 @@
+[
+  {
+    "id": "t_stranger",
+    "name": "Stranger Things",
+    "type": "series",
+    "synopsis": "When a boy vanishes, a small town uncovers a mystery of secret experiments and supernatural forces.",
+    "genre": "Sci-Fi, Horror",
+    "runtime": "4 seasons",
+    "ownerId": "u_eren",
+    "poster": "/49WJfeN0moxb9IPfGn8AIqMGskD.jpg",
+    "cast": "Millie Bobby Brown, Finn Wolfhard, David Harbour",
+    "maturityRating": "TV-14"
+  },
+  {
+    "id": "t_witcher",
+    "name": "The Witcher",
+    "type": "series",
+    "synopsis": "Geralt of Rivia, a solitary monster hunter, struggles to find his place in a world where people often prove more wicked than beasts.",
+    "genre": "Fantasy, Adventure",
+    "runtime": "3 seasons",
+    "ownerId": "u_priya",
+    "poster": "/7vjaCdMw15FEbXyLQTVa04URsPm.jpg"
+  },
+  {
+    "id": "t_wednesday",
+    "name": "Wednesday",
+    "type": "series",
+    "synopsis": "Wednesday Addams navigates her years as a student at Nevermore Academy, mastering her psychic ability and solving a murder mystery.",
+    "genre": "Mystery, Comedy",
+    "runtime": "1 season",
+    "ownerId": "u_eren",
+    "poster": "/9PFonBhy4cQy7Jz20NpMygczOkv.jpg"
+  },
+  {
+    "id": "t_money_heist",
+    "name": "Money Heist",
+    "type": "series",
+    "synopsis": "Eight thieves take hostages in the Royal Mint of Spain as a mastermind manipulates the police to carry out his plan.",
+    "genre": "Crime, Thriller",
+    "runtime": "5 parts",
+    "ownerId": "u_eren",
+    "poster": "/reEMJA1uzscCbkpeRJeTT2bjqUp.jpg"
+  },
+  {
+    "id": "t_dark",
+    "name": "Dark",
+    "type": "series",
+    "synopsis": "A missing child sets four families on a frantic hunt for answers as they unearth a mind-bending mystery that spans generations.",
+    "genre": "Sci-Fi, Mystery",
+    "runtime": "3 seasons",
+    "ownerId": "u_sam",
+    "poster": "/apbrbWs8M9lyOpJYU5WXrpFbk1Z.jpg"
+  },
+  {
+    "id": "t_squid_game",
+    "name": "Squid Game",
+    "type": "series",
+    "synopsis": "Hundreds of cash-strapped players accept an invitation to compete in children's games for a tempting prize, with deadly stakes.",
+    "genre": "Thriller, Drama",
+    "runtime": "1 season",
+    "ownerId": "u_eren",
+    "poster": "/dDlEmu3EZ0Pgg93K2SVNLCjCSvE.jpg"
+  },
+  {
+    "id": "t_crown",
+    "name": "The Crown",
+    "type": "series",
+    "synopsis": "Follows the political rivalries and romance of Queen Elizabeth II's reign and the events that shaped the second half of the 20th century.",
+    "genre": "Drama, History",
+    "runtime": "6 seasons",
+    "ownerId": "u_sam",
+    "poster": "/1M876KPjulVwppEpldhdc8V4o68.jpg"
+  }
+]

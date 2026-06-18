@@ -1,0 +1,9 @@
+[
+  { "id": "se_stranger_4", "titleId": "t_stranger", "number": 4, "title": "Season 4", "synopsis": "Six months after the Battle of Starcourt, the gang is split apart for the first time." },
+  { "id": "se_wednesday_1", "titleId": "t_wednesday", "number": 1, "title": "Season 1", "synopsis": "Wednesday's years as a student at Nevermore Academy." },
+  { "id": "se_witcher_3", "titleId": "t_witcher", "number": 3, "title": "Season 3", "synopsis": "Geralt takes Ciri into hiding as monarchs and mages hunt her down." },
+  { "id": "se_money_heist_5", "titleId": "t_money_heist", "number": 5, "title": "Part 5", "synopsis": "The gang is shut in the Bank of Spain as the Professor is captured." },
+  { "id": "se_squid_game_1", "titleId": "t_squid_game", "number": 1, "title": "Season 1", "synopsis": "Cash-strapped players accept a deadly invitation to compete in children's games." },
+  { "id": "se_dark_3", "titleId": "t_dark", "number": 3, "title": "Season 3", "synopsis": "A new world emerges, and the knot must finally be undone." },
+  { "id": "se_crown_6", "titleId": "t_crown", "number": 6, "title": "Season 6", "synopsis": "The final chapter of Queen Elizabeth II's reign into the new millennium." }
+]

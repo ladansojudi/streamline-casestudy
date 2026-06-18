@@ -1,0 +1,12 @@
+[
+  { "id": "cm_1", "episodeId": "e_wed_s1e05", "kind": "timestamp", "at": "12:04", "atPercent": 23, "field": null, "body": "Audio dips on the dialogue track here — bring the mix up ~3dB.", "authorId": "u_maya", "ago": "8m ago", "resolved": false },
+  { "id": "cm_2", "episodeId": "e_wed_s1e05", "kind": "timestamp", "at": "27:41", "atPercent": 53, "field": null, "body": "Visible boom mic in the top-left corner for ~2 seconds.", "authorId": "u_maya", "ago": "6m ago", "resolved": false },
+  { "id": "cm_3", "episodeId": "e_wed_s1e05", "kind": "field", "at": null, "atPercent": null, "field": "Cast", "body": "Two co-leads are missing from the cast list. Add before publish.", "authorId": "u_maya", "ago": "5m ago", "resolved": false },
+  { "id": "cm_4", "episodeId": "e_wed_s1e05", "kind": "timestamp", "at": "44:18", "atPercent": 85, "field": null, "body": "Subtitle timing drifts behind the audio by ~400ms.", "authorId": "u_maya", "ago": "3m ago", "resolved": true },
+  { "id": "cm_5", "episodeId": "e_wed_s1e05", "kind": "field", "at": null, "atPercent": null, "field": "Maturity rating", "body": "Rating not set — required for this region.", "authorId": "u_maya", "ago": "2m ago", "resolved": false },
+  { "id": "cm_6", "episodeId": "e_wed_s1e04", "kind": "timestamp", "at": "12:04", "atPercent": 23, "field": null, "body": "Audio dips at 12:04 — re-check the dialogue mix.", "authorId": "u_maya", "ago": "2h ago", "resolved": false },
+  { "id": "cm_7", "episodeId": "e_wed_s1e04", "kind": "field", "at": null, "atPercent": null, "field": "Captions", "body": "Captions still missing for this episode.", "authorId": "u_maya", "ago": "2h ago", "resolved": false },
+  { "id": "cm_8", "episodeId": "e_mh_p5e08", "kind": "timestamp", "at": "31:10", "atPercent": 64, "field": null, "body": "Color shift between shots at the vault — match to the master.", "authorId": "u_maya", "ago": "6h ago", "resolved": false },
+  { "id": "cm_9", "episodeId": "e_mh_p5e08", "kind": "field", "at": null, "atPercent": null, "field": "Captions", "body": "Captions missing — required before publish.", "authorId": "u_maya", "ago": "6h ago", "resolved": false },
+  { "id": "cm_10", "episodeId": "e_squid_s1e09", "kind": "field", "at": null, "atPercent": null, "field": "Maturity rating", "body": "Maturity rating not set for this region.", "authorId": "u_maya", "ago": "50m ago", "resolved": false }
+]
