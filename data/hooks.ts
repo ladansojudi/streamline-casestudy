@@ -16,6 +16,7 @@ import {
   getTitle,
   media,
   mediaForTitle,
+  notesForTitle,
   openNotesForTitle,
   reviewQueue,
   seasonsForTitle,
@@ -129,6 +130,15 @@ export function useTitleNotes(titleId: string) {
   return useQuery({
     queryKey: ["title-notes", titleId],
     queryFn: async () => openNotesForTitle(titleId),
+    enabled: !!titleId,
+  })
+}
+
+/** Every note (open + resolved) for a title — for the notes panel + archive. */
+export function useTitleNotesAll(titleId: string) {
+  return useQuery({
+    queryKey: ["title-notes-all", titleId],
+    queryFn: async () => notesForTitle(titleId),
     enabled: !!titleId,
   })
 }

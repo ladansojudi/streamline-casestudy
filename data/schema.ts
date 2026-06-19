@@ -185,6 +185,13 @@ export type Media = {
 
 export type CommentKind = "timestamp" | "field"
 
+/** A back-and-forth reply on a comment thread. */
+export type CommentReply = {
+  authorId: string
+  body: string
+  ago: string
+}
+
 export type Comment = {
   id: string
   episodeId: string
@@ -196,6 +203,8 @@ export type Comment = {
   authorId: string
   ago: string
   resolved: boolean
+  /** Conversation under the original note (Publisher ↔ Editor). */
+  replies?: CommentReply[]
 }
 
 export type ActivityTone = "default" | "success" | "warning"

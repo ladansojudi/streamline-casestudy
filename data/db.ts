@@ -236,10 +236,15 @@ export type TitleNote = CommentView & { episodeLabel: string | null }
 
 /** Open (unresolved) notes across all of a title's episodes — the fix list. */
 export function openNotesForTitle(titleId: string): TitleNote[] {
+  return notesForTitle(titleId).filter((n) => !n.resolved)
+}
+
+/** Every note (open + resolved) across a title's episodes, author + episode joined. */
+export function notesForTitle(titleId: string): TitleNote[] {
   const eps = episodes().filter((e) => e.titleId === titleId)
   const byId = new Map(eps.map((e) => [e.id, e]))
   return comments()
-    .filter((c) => !c.resolved && byId.has(c.episodeId))
+    .filter((c) => byId.has(c.episodeId))
     .map((c) => {
       const ep = byId.get(c.episodeId)!
       return {
