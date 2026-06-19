@@ -111,17 +111,36 @@ export function ContentStudioDropzone({
         <DialogContent className="sm:max-w-sm">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <Wand2 className="size-4 text-primary" />
-              {hasStructure ? "Replace files" : "Simulate an upload"}
+              <Sparkles className="size-4 text-primary" />
+              {hasStructure ? "Re-detected structure" : "Detected structure"}
             </DialogTitle>
             <DialogDescription>
-              {hasStructure
-                ? "Re-imports this title — the current structure is replaced with what you set below."
-                : isFilm
-                  ? "Adds a single feature file and auto-builds the structure."
-                  : "Drops sample files and auto-builds the Season → Episode structure."}
+              {isFilm
+                ? "We detected a single feature file. Confirm to add it."
+                : hasStructure
+                  ? "We re-read your files. Confirm to replace the current structure, or adjust below."
+                  : "We read your files and proposed this layout. Confirm, or adjust it below."}
             </DialogDescription>
           </DialogHeader>
+
+          {/* What the app detected — editable proposal */}
+          <div className="flex items-center gap-2 rounded-md border border-primary/20 bg-primary/5 px-3 py-2 text-xs">
+            <Sparkles className="size-3.5 shrink-0 text-primary" />
+            {isFilm ? (
+              <span>
+                Detected <span className="font-medium">1 feature file</span>.
+              </span>
+            ) : (
+              <span>
+                Detected{" "}
+                <span className="font-medium tabular-nums">
+                  {episodeCounts.length} season
+                  {episodeCounts.length > 1 ? "s" : ""} · {totalEpisodes} episodes
+                </span>{" "}
+                — adjust if it&apos;s off.
+              </span>
+            )}
+          </div>
 
           {!isFilm ? (
             <div className="grid gap-3">
@@ -158,15 +177,6 @@ export function ContentStudioDropzone({
                   ))}
                 </div>
               </div>
-
-              <p className="text-xs text-muted-foreground">
-                Creates{" "}
-                <span className="font-medium tabular-nums text-foreground">
-                  {totalEpisodes}
-                </span>{" "}
-                episodes across {episodeCounts.length} season
-                {episodeCounts.length > 1 ? "s" : ""}.
-              </p>
             </div>
           ) : null}
 
@@ -175,7 +185,7 @@ export function ContentStudioDropzone({
               Cancel
             </Button>
             <Button size="sm" onClick={run} disabled={running}>
-              {running ? "Uploading…" : "Upload"}
+              {running ? "Building…" : "Confirm & build"}
             </Button>
           </DialogFooter>
         </DialogContent>

@@ -165,6 +165,8 @@ export type Segment = {
 export type Thumbnail = {
   id: string
   titleId: string
+  /** Set → this is per-episode artwork; absent/null → title-level. */
+  episodeId?: string | null
   segmentId: string
   rulePriority: number
   /** Assigned media item id; null → falls back to the title poster. */

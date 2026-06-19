@@ -1,6 +1,6 @@
 "use client"
 
-import { useRef, useState } from "react"
+import { useState } from "react"
 import Image from "next/image"
 import { Check, ImagePlus, Upload } from "lucide-react"
 import { toast } from "sonner"
@@ -17,7 +17,32 @@ import {
 import { cn } from "@/lib/utils"
 import { mediaUrl } from "@/data/db"
 import { useCreateRow, useMediaForTitle } from "@/data/hooks"
-import { readImageFile } from "@/sections/media/read-image-file"
+
+// Demo upload — generate a gradient still so the flow continues without a real
+// file picker. Each click varies the colours.
+const SAMPLE_GRADIENTS: [string, string][] = [
+  ["#f43f5e", "#ea580c"],
+  ["#6366f1", "#7c3aed"],
+  ["#10b981", "#0f766e"],
+  ["#0ea5e9", "#1d4ed8"],
+  ["#d946ef", "#7e22ce"],
+]
+
+function makeSampleImage(index: number): string {
+  const canvas = document.createElement("canvas")
+  canvas.width = 640
+  canvas.height = 360
+  const ctx = canvas.getContext("2d")
+  const [a, b] = SAMPLE_GRADIENTS[index % SAMPLE_GRADIENTS.length]
+  if (ctx) {
+    const grad = ctx.createLinearGradient(0, 0, 640, 360)
+    grad.addColorStop(0, a)
+    grad.addColorStop(1, b)
+    ctx.fillStyle = grad
+    ctx.fillRect(0, 0, 640, 360)
+  }
+  return canvas.toDataURL("image/png")
+}
 
 export function ImagePickerDialog({
   titleId,
@@ -35,18 +60,14 @@ export function ImagePickerDialog({
 }) {
   const { data: items = [] } = useMediaForTitle(titleId)
   const create = useCreateRow("media", "md")
-  const fileInput = useRef<HTMLInputElement>(null)
   const [uploading, setUploading] = useState(false)
 
-  const onFiles = async (files: FileList | null) => {
-    const file = files?.[0]
-    if (!file || !file.type.startsWith("image/")) return
+  const uploadSample = async () => {
     setUploading(true)
     try {
-      const url = await readImageFile(file)
       const created = await create.mutateAsync({
-        name: file.name.replace(/\.[^.]+$/, ""),
-        url,
+        name: `Uploaded still ${items.length + 1}`,
+        url: makeSampleImage(items.length),
         kind: "art",
         titleId,
       })
@@ -54,10 +75,9 @@ export function ImagePickerDialog({
       toast.success("Image uploaded and selected")
       onOpenChange(false)
     } catch {
-      toast.error("Couldn't read that image")
+      toast.error("Couldn't add the image")
     } finally {
       setUploading(false)
-      if (fileInput.current) fileInput.current.value = ""
     }
   }
 
@@ -111,10 +131,10 @@ export function ImagePickerDialog({
             )
           })}
 
-          {/* Upload tile */}
+          {/* Upload tile — drops in a sample still so the flow keeps moving */}
           <button
             type="button"
-            onClick={() => fileInput.current?.click()}
+            onClick={uploadSample}
             disabled={uploading}
             className="flex aspect-video w-full flex-col items-center justify-center gap-1 rounded-md border border-dashed border-border text-muted-foreground transition-colors hover:border-foreground/30 hover:text-foreground"
           >
@@ -128,14 +148,6 @@ export function ImagePickerDialog({
             </span>
           </button>
         </div>
-
-        <input
-          ref={fileInput}
-          type="file"
-          accept="image/*"
-          hidden
-          onChange={(e) => onFiles(e.target.files)}
-        />
 
         <DialogFooter className="sm:justify-between">
           <Button

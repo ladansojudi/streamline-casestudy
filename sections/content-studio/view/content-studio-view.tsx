@@ -22,6 +22,7 @@ import {
 import { ReviewPlayer } from "@/components/review-player"
 import { isEpisodicTitle } from "@/data/schema"
 import {
+  useCreateRow,
   useEpisodes,
   useSeasons,
   useThumbnails,
@@ -31,7 +32,6 @@ import {
 } from "@/data/hooks"
 import { ContentStudioDropzone } from "@/sections/content-studio/content-studio-dropzone"
 import { ContentStudioEpisodeMeta } from "@/sections/content-studio/content-studio-episode-meta"
-import { ContentStudioEpisodeThumbnail } from "@/sections/content-studio/content-studio-episode-thumbnail"
 import { ContentStudioSeasonMeta } from "@/sections/content-studio/content-studio-season-meta"
 import { ContentStudioSubmitDialog } from "@/sections/content-studio/content-studio-submit-dialog"
 import { ContentStudioReviewLock } from "@/sections/content-studio/content-studio-review-lock"
@@ -190,6 +190,25 @@ export function ContentStudioView({
   const fixEpisodeItems = Object.fromEntries(
     titleEpisodes.map((e) => [e.id, e.season !== null ? e.label : "Feature"])
   )
+
+  // Editor can pin a note to a moment in the video (like the Publisher).
+  const createComment = useCreateRow("comments", "cm")
+  const pinTimestamp = fixEpisode
+    ? async (atPercent: number, at: string, body: string) => {
+        await createComment.mutateAsync({
+          episodeId: fixEpisode.id,
+          kind: "timestamp",
+          at,
+          atPercent,
+          field: null,
+          body,
+          authorId: "u_eren",
+          ago: "just now",
+          resolved: false,
+        })
+        toast.success(`Pinned a note at ${at}`)
+      }
+    : undefined
 
   // Click a note in the panel → reveal & flash the field it's pinned to.
   const jumpToNote = (note: (typeof titleNotes)[number]) => {
@@ -390,6 +409,7 @@ export function ContentStudioView({
                   comments={timestampNotes}
                   poster={poster}
                   title={activeTitleName}
+                  onPin={pinTimestamp}
                 />
               </CardContent>
             </Card>
@@ -402,7 +422,6 @@ export function ContentStudioView({
             />
             <ContentStudioThumbnails
               titleId={activeTitleId}
-              variants={variants}
               poster={poster}
               invalid={attemptedSubmit && !thumbnailsAssigned}
               fieldNotes={fieldNotes}
@@ -439,8 +458,10 @@ export function ContentStudioView({
                   fieldNotes={fieldNotes}
                   onResolveField={onResolveField}
                 />
-                <ContentStudioEpisodeThumbnail
-                  episode={fixEpisode}
+                <ContentStudioThumbnails
+                  titleId={activeTitleId}
+                  episodeId={fixEpisode.id}
+                  poster={poster}
                   fieldNotes={fieldNotes}
                   onResolveField={onResolveField}
                 />
@@ -491,7 +512,6 @@ export function ContentStudioView({
                 />
                 <ContentStudioThumbnails
                   titleId={activeTitleId}
-                  variants={variants}
                   poster={poster}
                   invalid={attemptedSubmit && !thumbnailsAssigned}
                   fieldNotes={fieldNotes}
@@ -507,8 +527,10 @@ export function ContentStudioView({
                   fieldNotes={fieldNotes}
                   onResolveField={onResolveField}
                 />
-                <ContentStudioEpisodeThumbnail
-                  episode={selectedEpisode}
+                <ContentStudioThumbnails
+                  titleId={activeTitleId}
+                  episodeId={selectedEpisode.id}
+                  poster={poster}
                   fieldNotes={fieldNotes}
                   onResolveField={onResolveField}
                 />

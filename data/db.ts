@@ -272,14 +272,27 @@ export type ThumbnailView = Thumbnail & {
   media: Media | null
 }
 
+function toThumbnailView(t: Thumbnail): ThumbnailView {
+  return {
+    ...t,
+    segment: getSegment(t.segmentId)!,
+    media: t.mediaId ? (getMedia(t.mediaId) ?? null) : null,
+  }
+}
+
+/** Title-level audience thumbnails (excludes per-episode artwork). */
 export function thumbnailsForTitle(titleId: string): ThumbnailView[] {
   return thumbnails()
-    .filter((t) => t.titleId === titleId)
-    .map((t) => ({
-      ...t,
-      segment: getSegment(t.segmentId)!,
-      media: t.mediaId ? (getMedia(t.mediaId) ?? null) : null,
-    }))
+    .filter((t) => t.titleId === titleId && !t.episodeId)
+    .map(toThumbnailView)
+    .sort((a, b) => a.rulePriority - b.rulePriority)
+}
+
+/** Per-episode audience thumbnails. */
+export function thumbnailsForEpisode(episodeId: string): ThumbnailView[] {
+  return thumbnails()
+    .filter((t) => t.episodeId === episodeId)
+    .map(toThumbnailView)
     .sort((a, b) => a.rulePriority - b.rulePriority)
 }
 

@@ -21,6 +21,7 @@ import {
   reviewQueue,
   seasonsForTitle,
   segments,
+  thumbnailsForEpisode,
   thumbnailsForTitle,
   titleAssetCounts,
   titles,
@@ -156,6 +157,14 @@ export function useThumbnails(titleId: string) {
     queryKey: ["thumbnails", titleId],
     queryFn: async () => thumbnailsForTitle(titleId),
     enabled: !!titleId,
+  })
+}
+
+export function useEpisodeThumbnails(episodeId: string) {
+  return useQuery({
+    queryKey: ["thumbnails-episode", episodeId],
+    queryFn: async () => thumbnailsForEpisode(episodeId),
+    enabled: !!episodeId,
   })
 }
 

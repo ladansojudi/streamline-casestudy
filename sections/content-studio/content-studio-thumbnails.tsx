@@ -28,23 +28,29 @@ import { mediaUrl, type ThumbnailView, type TitleNote } from "@/data/db"
 import {
   useCreateRow,
   useDeleteRow,
+  useEpisodeThumbnails,
   useSegments,
+  useThumbnails,
   useUpdateRow,
 } from "@/data/hooks"
 import { ImagePickerDialog } from "@/components/image-picker-dialog"
 import { AudiencesSegmentDialog } from "@/sections/audiences/audiences-segment-dialog"
 import { FieldNoteBadge } from "@/sections/content-studio/content-studio-field-note-badge"
 
+/** Id for the virtual Default tile shown until a real fallback row exists. */
+const DEFAULT_TILE_ID = "__default__"
+
 export function ContentStudioThumbnails({
   titleId,
-  variants: thumbnailVariants,
+  episodeId,
   poster,
   invalid = false,
   fieldNotes,
   onResolveField,
 }: {
   titleId: string
-  variants: ThumbnailView[]
+  /** Set → per-episode artwork; absent → title-level audience thumbnails. */
+  episodeId?: string
   poster: string | null
   /** A failed Submit attempt with no audience thumbnail yet — highlight in red. */
   invalid?: boolean
@@ -52,6 +58,13 @@ export function ContentStudioThumbnails({
   onResolveField?: (field: string) => void
 }) {
   const { data } = useSegments()
+  // Scope the variants to the title or the episode (both hooks always run).
+  const titleThumbs = useThumbnails(episodeId ? "" : titleId)
+  const episodeThumbs = useEpisodeThumbnails(episodeId ?? "")
+  const thumbnailVariants: ThumbnailView[] = episodeId
+    ? (episodeThumbs.data ?? [])
+    : (titleThumbs.data ?? [])
+  const isEpisode = !!episodeId
   const addThumbnail = useCreateRow("thumbnails", "th")
   const removeThumbnail = useDeleteRow("thumbnails")
   const updateThumbnail = useUpdateRow("thumbnails")
@@ -70,12 +83,37 @@ export function ContentStudioThumbnails({
     (s) => s.kind !== "fallback" && !assignedSegmentIds.has(s.id)
   )
 
+  // Always show a Default tile. When the scope has no stored fallback (a new
+  // title, or any episode), render a virtual one — it becomes real on first
+  // image set, so the artwork is never empty.
+  const fallbackSegment = (data?.all ?? []).find((s) => s.kind === "fallback")
+  const hasFallback = thumbnailVariants.some(
+    (v) => v.segment.kind === "fallback"
+  )
+  const variants: ThumbnailView[] =
+    hasFallback || !fallbackSegment
+      ? thumbnailVariants
+      : [
+          {
+            id: DEFAULT_TILE_ID,
+            titleId,
+            episodeId: episodeId ?? null,
+            segmentId: fallbackSegment.id,
+            rulePriority: 0,
+            mediaId: null,
+            segment: fallbackSegment,
+            media: null,
+          },
+          ...thumbnailVariants,
+        ]
+
   const assignSegment = async (segmentId: string, segmentName: string) => {
     // Next priority = one above the current highest.
     const nextPriority =
       Math.max(0, ...thumbnailVariants.map((v) => v.rulePriority)) + 1
     const created = await addThumbnail.mutateAsync({
       titleId,
+      episodeId: episodeId ?? null,
       segmentId,
       rulePriority: nextPriority,
     })
@@ -108,27 +146,41 @@ export function ContentStudioThumbnails({
   const setImage = async (thumbnailId: string, mediaId: string | null) => {
     // An explicit choice (an image, or "use title poster") keeps the segment.
     setPendingNewId(null)
+    // First image on the virtual default → materialise the fallback row.
+    if (thumbnailId === DEFAULT_TILE_ID) {
+      if (!fallbackSegment) return
+      await addThumbnail.mutateAsync({
+        titleId,
+        episodeId: episodeId ?? null,
+        segmentId: fallbackSegment.id,
+        rulePriority: 0,
+        mediaId,
+      })
+      return
+    }
     await updateThumbnail.mutateAsync({ id: thumbnailId, patch: { mediaId } })
   }
 
   return (
     <Card
-      data-tour="audience"
+      data-tour={isEpisode ? undefined : "audience"}
       className={cn("transition-shadow", invalid && "ring-2 ring-destructive/60")}
     >
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Users className="size-4 text-muted-foreground" />
-          Audience thumbnails
+          {isEpisode ? "Episode artwork" : "Audience thumbnails"}
         </CardTitle>
         <CardDescription className={cn(invalid && "text-destructive")}>
           {invalid
             ? "Add at least one audience thumbnail before submitting for review."
-            : "Show the right artwork to different viewers. Add a segment to give it its own thumbnail — highest rule priority wins."}
+            : isEpisode
+              ? "Per-episode artwork by audience. Add a segment to override the title's thumbnail for those viewers."
+              : "Show the right artwork to different viewers. Add a segment to give it its own thumbnail — highest rule priority wins."}
         </CardDescription>
       </CardHeader>
       <CardContent className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-        {thumbnailVariants.map((variant) => {
+        {variants.map((variant) => {
           const isDefault = variant.segment.kind === "fallback"
           const customSrc = mediaUrl(variant.media?.url, "w342")
           return (

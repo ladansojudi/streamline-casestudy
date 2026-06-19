@@ -17,7 +17,7 @@ import {
   type EpisodeView,
   type ThumbnailView,
 } from "@/data/db"
-import { useComments, useUpdateRow } from "@/data/hooks"
+import { useComments, useCreateRow, useUpdateRow } from "@/data/hooks"
 import { ReviewComments } from "@/sections/review/review-comments"
 import { ReviewFields } from "@/sections/review/review-fields"
 import { ReviewPlayer } from "@/components/review-player"
@@ -32,8 +32,28 @@ export function ReviewDetail({
   const router = useRouter()
   const { data: comments = [] } = useComments(item.id)
   const updateEpisode = useUpdateRow("episodes")
+  const createComment = useCreateRow("comments", "cm")
 
   const openCount = comments.filter((c) => !c.resolved).length
+
+  const pinAtTimestamp = async (
+    atPercent: number,
+    at: string,
+    body: string
+  ) => {
+    await createComment.mutateAsync({
+      episodeId: item.id,
+      kind: "timestamp",
+      at,
+      atPercent,
+      field: null,
+      body,
+      authorId: "u_maya",
+      ago: "just now",
+      resolved: false,
+    })
+    toast.success(`Pinned a note at ${at}`)
+  }
 
   const approve = async () => {
     await updateEpisode.mutateAsync({
@@ -115,6 +135,7 @@ export function ReviewDetail({
                 comments={comments}
                 poster={item.title.poster}
                 title={item.displayName}
+                onPin={pinAtTimestamp}
               />
             </CardContent>
           </Card>
