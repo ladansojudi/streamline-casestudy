@@ -1,6 +1,6 @@
 "use client"
 
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import Image from "next/image"
 import { Clapperboard, Send } from "lucide-react"
 import { toast } from "sonner"
@@ -22,6 +22,7 @@ import {
 import { ReviewPlayer } from "@/components/review-player"
 import { isEpisodicTitle } from "@/data/schema"
 import {
+  useComments,
   useCreateRow,
   useEpisodes,
   useSeasons,
@@ -191,24 +192,25 @@ export function ContentStudioView({
     titleEpisodes.map((e) => [e.id, e.season !== null ? e.label : "Feature"])
   )
 
-  // Editor can pin a note to a moment in the video (like the Publisher).
+  // Editor can pin a note to a moment in any episode's video (like the Publisher).
   const createComment = useCreateRow("comments", "cm")
-  const pinTimestamp = fixEpisode
-    ? async (atPercent: number, at: string, body: string) => {
-        await createComment.mutateAsync({
-          episodeId: fixEpisode.id,
-          kind: "timestamp",
-          at,
-          atPercent,
-          field: null,
-          body,
-          authorId: "u_eren",
-          ago: "just now",
-          resolved: false,
-        })
-        toast.success(`Pinned a note at ${at}`)
-      }
-    : undefined
+  const makePin = (episodeId?: string) =>
+    episodeId
+      ? async (atPercent: number, at: string, body: string) => {
+          await createComment.mutateAsync({
+            episodeId,
+            kind: "timestamp",
+            at,
+            atPercent,
+            field: null,
+            body,
+            authorId: "u_eren",
+            ago: "just now",
+            resolved: false,
+          })
+          toast.success(`Pinned a note at ${at}`)
+        }
+      : undefined
 
   // Click a note in the panel → reveal & flash the field it's pinned to.
   const jumpToNote = (note: (typeof titleNotes)[number]) => {
@@ -253,6 +255,21 @@ export function ContentStudioView({
     selection.kind === "season"
       ? seasons.find((s) => s.id === selection.seasonId)
       : undefined
+  // The selected episode's comments power its video player (pins + notes).
+  const { data: selectedEpisodeComments = [] } = useComments(
+    selection.kind === "episode" ? selection.episodeId : ""
+  )
+
+  // Land on the title's first episode (video front) once its episodes load —
+  // like the Publisher opening straight onto a video. Runs once per title.
+  const autoSelectedRef = useRef<string | null>(null)
+  useEffect(() => {
+    if (!activeTitleId || autoSelectedRef.current === activeTitleId) return
+    const firstEp = episodes.find((e) => e.titleId === activeTitleId)
+    if (!firstEp) return
+    autoSelectedRef.current = activeTitleId
+    setSelection({ kind: "episode", episodeId: firstEp.id })
+  }, [activeTitleId, episodes])
 
   // Submit-for-review requirements (title-level).
   const filesUploaded =
@@ -409,7 +426,7 @@ export function ContentStudioView({
                   comments={timestampNotes}
                   poster={poster}
                   title={activeTitleName}
-                  onPin={pinTimestamp}
+                  onPin={makePin(fixEpisode?.id)}
                 />
               </CardContent>
             </Card>
@@ -479,8 +496,8 @@ export function ContentStudioView({
           </div>
         </div>
       ) : tree && activeTitle ? (
-        <div className="grid grid-cols-1 gap-4 md:gap-6 lg:grid-cols-5">
-          <div className="lg:col-span-2">
+        <div className="grid grid-cols-1 gap-4 md:gap-6 lg:grid-cols-12">
+          <div className="lg:col-span-3">
             <ContentStudioTree
               tree={tree}
               selection={selection}
@@ -498,7 +515,7 @@ export function ContentStudioView({
           <fieldset
             disabled={inReview}
             className={cn(
-              "flex min-w-0 flex-col gap-4 md:gap-6 lg:col-span-3",
+              "flex min-w-0 flex-col gap-4 md:gap-6 lg:col-span-9",
               inReview && "opacity-95"
             )}
           >
@@ -522,6 +539,20 @@ export function ContentStudioView({
 
             {selection.kind === "episode" && selectedEpisode ? (
               <>
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-sm">Content</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <ReviewPlayer
+                      runtime={selectedEpisode.reviewRuntime ?? "—"}
+                      comments={selectedEpisodeComments}
+                      poster={activeTitle.poster}
+                      title={selectedEpisode.displayName}
+                      onPin={makePin(selectedEpisode.id)}
+                    />
+                  </CardContent>
+                </Card>
                 <ContentStudioEpisodeMeta
                   episode={selectedEpisode}
                   fieldNotes={fieldNotes}
