@@ -44,7 +44,7 @@ export const TITLE_TYPES = [
   { value: "docuseries", label: "Docuseries", episodic: true },
   { value: "reality", label: "Reality", episodic: true },
   { value: "anime", label: "Anime", episodic: true },
-  { value: "film", label: "Film", episodic: false },
+  { value: "film", label: "Movie", episodic: false },
   { value: "documentary", label: "Documentary", episodic: false },
   { value: "short", label: "Short", episodic: false },
   { value: "special", label: "Special", episodic: false },
