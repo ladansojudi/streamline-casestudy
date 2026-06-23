@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useRef, useState } from "react"
 import Image from "next/image"
 import { ImageIcon, Plus, Sparkles, Users, X } from "lucide-react"
 import { toast } from "sonner"
@@ -75,8 +75,9 @@ export function ContentStudioThumbnails({
     mediaId: string | null
   } | null>(null)
   // A segment just added via "+": if the picker is dismissed without choosing
-  // art, roll the segment back so closing = "never mind".
-  const [pendingNewId, setPendingNewId] = useState<string | null>(null)
+  // art, roll the segment back so closing = "never mind". A ref (not state) so
+  // setImage can clear it synchronously before the close handler reads it.
+  const pendingNewIdRef = useRef<string | null>(null)
 
   const assignedSegmentIds = new Set(thumbnailVariants.map((v) => v.segmentId))
   const available = (data?.all ?? []).filter(
@@ -118,7 +119,7 @@ export function ContentStudioThumbnails({
       rulePriority: nextPriority,
     })
     // Go straight to choosing/uploading this segment's artwork.
-    setPendingNewId(created.id)
+    pendingNewIdRef.current = created.id
     setPicking({ id: created.id, mediaId: created.mediaId ?? null })
     toast.success(`Choose artwork for ${segmentName}`)
   }
@@ -127,12 +128,13 @@ export function ContentStudioThumbnails({
   // explicit choice), undo the add so the user can back out cleanly.
   const closePicker = async (open: boolean) => {
     if (open) return
-    if (pendingNewId) {
-      await removeThumbnail.mutateAsync(pendingNewId)
+    const abandoned = pendingNewIdRef.current
+    pendingNewIdRef.current = null
+    setPicking(null)
+    if (abandoned) {
+      await removeThumbnail.mutateAsync(abandoned)
       toast.message("Segment discarded")
     }
-    setPendingNewId(null)
-    setPicking(null)
   }
 
   const removeVariant = async (id: string, segmentName: string) => {
@@ -145,7 +147,7 @@ export function ContentStudioThumbnails({
 
   const setImage = async (thumbnailId: string, mediaId: string | null) => {
     // An explicit choice (an image, or "use title poster") keeps the segment.
-    setPendingNewId(null)
+    pendingNewIdRef.current = null
     // First image on the virtual default → materialise the fallback row.
     if (thumbnailId === DEFAULT_TILE_ID) {
       if (!fallbackSegment) return
