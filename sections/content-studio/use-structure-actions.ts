@@ -10,7 +10,7 @@ import {
   seasonsForTitle,
 } from "@/data/db"
 import { createRow, deleteRow, isSeedRow, updateRow } from "@/data/store"
-import type { EpisodeStatus } from "@/data/schema"
+import type { EpisodeStatus, Title } from "@/data/schema"
 
 const EMPTY_ASSETS = {
   video: false,
@@ -156,6 +156,25 @@ export function useStructureActions(titleId: string) {
       progress: startProgress[i % startProgress.length],
     })
 
+    // The system auto-fills what it can detect from the files; the rest (cast,
+    // audience artwork) is left flagged for the Editor.
+    const autoFillTitle = async () => {
+      const t = getTitle(titleId)
+      if (!t) return
+      const patch: Partial<Title> = {
+        runtime: isEpisodicTitle(t.type)
+          ? `${episodesPerSeason.length} season${episodesPerSeason.length > 1 ? "s" : ""}`
+          : "1h 52m",
+      }
+      if (!t.synopsis) patch.synopsis = `Auto-imported summary for ${t.name}.`
+      if (!t.genre) patch.genre = "Drama"
+      if (!t.maturityRating)
+        patch.maturityRating = isEpisodicTitle(t.type) ? "TV-14" : "PG-13"
+      // `cast` is intentionally left empty — the Editor fills it.
+      await updateRow("titles", titleId, patch)
+    }
+    const detectedSynopsis = "Auto-detected summary — refine before publishing."
+
     if (!isEpisodicTitle(title.type)) {
       await createRow("episodes", "e", {
         titleId,
@@ -165,17 +184,20 @@ export function useStructureActions(titleId: string) {
         label: "Feature",
         code: "FEAT",
         episodeTitle: title.name,
+        episodeSynopsis: detectedSynopsis,
+        runtime: "1h 52m",
         file: `${title.name.replace(/\s+/g, "_")}_master.mov`,
         size: "48.0 GB",
         status: "uploading",
         uploadProgress: 40,
         assets: { ...EMPTY_ASSETS },
-        missing: ["Everything"],
+        missing: ["Audience thumbnail"],
         updated: "just now",
         releaseDate: null,
       })
+      await autoFillTitle()
       await refresh()
-      toast.success("Uploaded feature file — building structure")
+      toast.success("Uploaded feature file — details auto-filled")
       return
     }
 
@@ -201,17 +223,20 @@ export function useStructureActions(titleId: string) {
           label: `S${number} · E${pad}`,
           code: `EP${number}${pad}`,
           episodeTitle: `Episode ${ep}`,
+          episodeSynopsis: detectedSynopsis,
+          runtime: `${40 + ((counter * 3) % 12)} min`,
           file: `${title.name.replace(/\s+/g, "_")}_S${pad}E${pad}_master.mov`,
           size: `${(38 + ((counter * 7) % 20)).toFixed(1)} GB`,
           status,
           uploadProgress: progress,
           assets: { ...EMPTY_ASSETS },
-          missing: ["Everything"],
+          missing: ["Audience thumbnail"],
           updated: "just now",
           releaseDate: null,
         })
       }
     }
+    await autoFillTitle()
     await refresh()
     const seasonCount = episodesPerSeason.length
     const totalEpisodes = episodesPerSeason.reduce((sum, n) => sum + Math.max(1, n), 0)
