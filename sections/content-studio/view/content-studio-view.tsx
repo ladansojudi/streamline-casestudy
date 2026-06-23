@@ -282,13 +282,16 @@ export function ContentStudioView({
     activeTitle?.cast &&
     activeTitle?.maturityRating
   )
-  const thumbnailsAssigned = variants.some((v) => v.segment.kind !== "fallback")
+  // Done once there's any artwork: an audience segment, or a cover on the default.
+  const thumbnailsAssigned = variants.some(
+    (v) => v.segment.kind !== "fallback" || !!v.mediaId
+  )
 
   const missingSteps = [
     !filesUploaded && "finish uploading files",
     !structureBuilt && "add structure",
     !metadataComplete && "complete title metadata",
-    !thumbnailsAssigned && "add an audience thumbnail",
+    !thumbnailsAssigned && "add cover artwork",
   ].filter(Boolean) as string[]
   const readyToSubmit = missingSteps.length === 0
   const inPrep = prepTitleIds.has(activeTitleId)

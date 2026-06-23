@@ -175,7 +175,7 @@ export function ContentStudioThumbnails({
         </CardTitle>
         <CardDescription className={cn(invalid && "text-destructive")}>
           {invalid
-            ? "Add at least one audience thumbnail before submitting for review."
+            ? "Set the cover (or add an audience thumbnail) before submitting for review."
             : isEpisode
               ? "Per-episode artwork by audience. Add a segment to override the title's thumbnail for those viewers."
               : "Show the right artwork to different viewers. Add a segment to give it its own thumbnail — highest rule priority wins."}
