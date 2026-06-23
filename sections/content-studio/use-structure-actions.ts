@@ -174,6 +174,22 @@ export function useStructureActions(titleId: string) {
       await updateRow("titles", titleId, patch)
     }
     const detectedSynopsis = "Auto-detected summary — refine before publishing."
+    const detectedRating = isEpisodicTitle(title.type) ? "TV-14" : "PG-13"
+    const DIRECTORS = [
+      "Ava Okafor",
+      "Marcus Reyes",
+      "Lena Tanaka",
+      "Sofia Brandt",
+      "Diego Marín",
+    ]
+    // Fields the system fills per episode; `guestStars` + artwork stay for the Editor.
+    const episodeAutoFill = (i: number) => ({
+      episodeSynopsis: detectedSynopsis,
+      runtime: `${40 + ((i * 3) % 12)} min`,
+      maturityRating: detectedRating,
+      director: DIRECTORS[i % DIRECTORS.length],
+      writers: "Story by the writers' room",
+    })
 
     if (!isEpisodicTitle(title.type)) {
       await createRow("episodes", "e", {
@@ -184,7 +200,7 @@ export function useStructureActions(titleId: string) {
         label: "Feature",
         code: "FEAT",
         episodeTitle: title.name,
-        episodeSynopsis: detectedSynopsis,
+        ...episodeAutoFill(0),
         runtime: "1h 52m",
         file: `${title.name.replace(/\s+/g, "_")}_master.mov`,
         size: "48.0 GB",
@@ -223,8 +239,7 @@ export function useStructureActions(titleId: string) {
           label: `S${number} · E${pad}`,
           code: `EP${number}${pad}`,
           episodeTitle: `Episode ${ep}`,
-          episodeSynopsis: detectedSynopsis,
-          runtime: `${40 + ((counter * 3) % 12)} min`,
+          ...episodeAutoFill(counter),
           file: `${title.name.replace(/\s+/g, "_")}_S${pad}E${pad}_master.mov`,
           size: `${(38 + ((counter * 7) % 20)).toFixed(1)} GB`,
           status,
