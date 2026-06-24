@@ -12,6 +12,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
+import { useTitles } from "@/data/hooks"
 
 function toLabel(segment: string) {
   return segment
@@ -22,6 +23,11 @@ function toLabel(segment: string) {
 export function HeaderBreadcrumb() {
   const pathname = usePathname()
   const segments = pathname.split("/").filter(Boolean)
+  // Resolve a title id in the path (e.g. /content-studio/t_xxxx) to its real
+  // name, so the crumb reads "Content Studio › Money Heist", not a raw id.
+  const { data: titles = [] } = useTitles()
+  const titleName = (segment: string) =>
+    titles.find((t) => t.id === segment)?.name ?? toLabel(segment)
 
   return (
     <Breadcrumb>
@@ -43,10 +49,10 @@ export function HeaderBreadcrumb() {
               <BreadcrumbSeparator />
               <BreadcrumbItem>
                 {isLast ? (
-                  <BreadcrumbPage>{toLabel(segment)}</BreadcrumbPage>
+                  <BreadcrumbPage>{titleName(segment)}</BreadcrumbPage>
                 ) : (
                   <BreadcrumbLink
-                    render={<Link href={href}>{toLabel(segment)}</Link>}
+                    render={<Link href={href}>{titleName(segment)}</Link>}
                   />
                 )}
               </BreadcrumbItem>

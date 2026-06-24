@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/select"
 import { ReviewPlayer } from "@/components/review-player"
 import { isEpisodicTitle } from "@/data/schema"
+import { titleTypeLabel } from "@/data/db"
 import {
   useComments,
   useCreateRow,
@@ -296,6 +297,11 @@ export function ContentStudioView({
   const readyToSubmit = missingSteps.length === 0
   const inPrep = prepTitleIds.has(activeTitleId)
 
+  // Once the import has built structure, the system has filled what it can —
+  // flag the leftover required fields (cast, cover artwork) right away so the
+  // Editor knows what to complete, instead of only after a blocked submit.
+  const flagGaps = attemptedSubmit || structureBuilt
+
   const onPickTitle = (v: string | null) => {
     if (!v) return
     setTitleId(v)
@@ -344,15 +350,17 @@ export function ContentStudioView({
           </div>
           <div className="grid gap-1">
             <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+              Content Studio
+              {activeTitle ? ` · ${titleTypeLabel(activeTitle.type)}` : ""}
+              {" · "}
               {hasChanges
-                ? "Changes requested · "
+                ? "Changes requested"
                 : inReview
-                  ? "In review · "
-                  : "Preparing "}
-              {activeTitleName}
+                  ? "In review"
+                  : "Preparing"}
             </p>
             <h1 className="font-heading text-2xl font-semibold tracking-tight">
-              Content Studio
+              {activeTitleName}
             </h1>
             <p className="text-sm text-muted-foreground">
               {hasChanges
@@ -436,14 +444,14 @@ export function ContentStudioView({
 
             <ContentStudioTitleMeta
               title={activeTitle}
-              forceValidate={attemptedSubmit && !metadataComplete}
+              forceValidate={flagGaps && !metadataComplete}
               fieldNotes={fieldNotes}
               onResolveField={onResolveField}
             />
             <ContentStudioThumbnails
               titleId={activeTitleId}
               poster={poster}
-              invalid={attemptedSubmit && !thumbnailsAssigned}
+              invalid={flagGaps && !thumbnailsAssigned}
               fieldNotes={fieldNotes}
               onResolveField={onResolveField}
             />
@@ -526,14 +534,14 @@ export function ContentStudioView({
               <>
                 <ContentStudioTitleMeta
                   title={activeTitle}
-                  forceValidate={attemptedSubmit && !metadataComplete}
+                  forceValidate={flagGaps && !metadataComplete}
                   fieldNotes={fieldNotes}
                   onResolveField={onResolveField}
                 />
                 <ContentStudioThumbnails
                   titleId={activeTitleId}
                   poster={poster}
-                  invalid={attemptedSubmit && !thumbnailsAssigned}
+                  invalid={flagGaps && !thumbnailsAssigned}
                   fieldNotes={fieldNotes}
                   onResolveField={onResolveField}
                 />

@@ -1,6 +1,6 @@
 "use client"
 
-import { useRef, useState } from "react"
+import { useState } from "react"
 import Image from "next/image"
 import { ImageIcon, Plus, Sparkles, Users, X } from "lucide-react"
 import { toast } from "sonner"
@@ -69,15 +69,14 @@ export function ContentStudioThumbnails({
   const removeThumbnail = useDeleteRow("thumbnails")
   const updateThumbnail = useUpdateRow("thumbnails")
   const [createOpen, setCreateOpen] = useState(false)
-  // The thumbnail whose image we're picking (id + current media is all we need).
-  const [picking, setPicking] = useState<{
-    id: string
-    mediaId: string | null
-  } | null>(null)
-  // A segment just added via "+": if the picker is dismissed without choosing
-  // art, roll the segment back so closing = "never mind". A ref (not state) so
-  // setImage can clear it synchronously before the close handler reads it.
-  const pendingNewIdRef = useRef<string | null>(null)
+  // What the picker is choosing art for: an existing variant (update its media)
+  // or a brand-new segment that isn't created yet (created on confirm, so its
+  // tile only appears in the grid once the user picks an image — never before).
+  const [picking, setPicking] = useState<
+    | { kind: "variant"; id: string; mediaId: string | null }
+    | { kind: "new-segment"; segmentId: string }
+    | null
+  >(null)
 
   const assignedSegmentIds = new Set(thumbnailVariants.map((v) => v.segmentId))
   const available = (data?.all ?? []).filter(
@@ -108,33 +107,16 @@ export function ContentStudioThumbnails({
           ...thumbnailVariants,
         ]
 
-  const assignSegment = async (segmentId: string, segmentName: string) => {
-    // Next priority = one above the current highest.
-    const nextPriority =
-      Math.max(0, ...thumbnailVariants.map((v) => v.rulePriority)) + 1
-    const created = await addThumbnail.mutateAsync({
-      titleId,
-      episodeId: episodeId ?? null,
-      segmentId,
-      rulePriority: nextPriority,
-    })
-    // Go straight to choosing/uploading this segment's artwork.
-    pendingNewIdRef.current = created.id
-    setPicking({ id: created.id, mediaId: created.mediaId ?? null })
+  const assignSegment = (segmentId: string, segmentName: string) => {
+    // Don't create the row yet — just open the picker. The tile materialises in
+    // the grid only after an image is chosen and confirmed (see applyImage).
+    setPicking({ kind: "new-segment", segmentId })
     toast.success(`Choose artwork for ${segmentName}`)
   }
 
-  // Closing the picker. If a freshly-added segment was never given art (no
-  // explicit choice), undo the add so the user can back out cleanly.
-  const closePicker = async (open: boolean) => {
-    if (open) return
-    const abandoned = pendingNewIdRef.current
-    pendingNewIdRef.current = null
-    setPicking(null)
-    if (abandoned) {
-      await removeThumbnail.mutateAsync(abandoned)
-      toast.message("Segment discarded")
-    }
+  // Closing the picker is a clean no-op now — nothing is created until confirm.
+  const closePicker = (open: boolean) => {
+    if (!open) setPicking(null)
   }
 
   const removeVariant = async (id: string, segmentName: string) => {
@@ -145,11 +127,26 @@ export function ContentStudioThumbnails({
     else toast.error("Couldn't remove that artwork")
   }
 
-  const setImage = async (thumbnailId: string, mediaId: string | null) => {
-    // An explicit choice (an image, or "use title poster") keeps the segment.
-    pendingNewIdRef.current = null
+  // Confirmed pick from the dialog. Creates the row for a new segment / virtual
+  // default, or updates an existing variant's media.
+  const applyImage = async (mediaId: string | null) => {
+    if (!picking) return
+    if (picking.kind === "new-segment") {
+      // No image picked → nothing to create (tile never appears).
+      if (!mediaId) return
+      const nextPriority =
+        Math.max(0, ...thumbnailVariants.map((v) => v.rulePriority)) + 1
+      await addThumbnail.mutateAsync({
+        titleId,
+        episodeId: episodeId ?? null,
+        segmentId: picking.segmentId,
+        rulePriority: nextPriority,
+        mediaId,
+      })
+      return
+    }
     // First image on the virtual default → materialise the fallback row.
-    if (thumbnailId === DEFAULT_TILE_ID) {
+    if (picking.id === DEFAULT_TILE_ID) {
       if (!fallbackSegment) return
       await addThumbnail.mutateAsync({
         titleId,
@@ -160,7 +157,7 @@ export function ContentStudioThumbnails({
       })
       return
     }
-    await updateThumbnail.mutateAsync({ id: thumbnailId, patch: { mediaId } })
+    await updateThumbnail.mutateAsync({ id: picking.id, patch: { mediaId } })
   }
 
   return (
@@ -248,6 +245,7 @@ export function ContentStudioThumbnails({
                   className="absolute bottom-1.5 left-1.5 h-6 opacity-0 transition-opacity focus-visible:opacity-100 group-hover:opacity-100"
                   onClick={() =>
                     setPicking({
+                      kind: "variant",
                       id: variant.id,
                       mediaId: variant.mediaId ?? null,
                     })
@@ -347,10 +345,10 @@ export function ContentStudioThumbnails({
       {picking ? (
         <ImagePickerDialog
           titleId={titleId}
-          currentMediaId={picking.mediaId ?? null}
+          currentMediaId={picking.kind === "variant" ? picking.mediaId : null}
           open={!!picking}
           onOpenChange={closePicker}
-          onPick={(mediaId) => setImage(picking.id, mediaId)}
+          onPick={applyImage}
         />
       ) : null}
     </Card>

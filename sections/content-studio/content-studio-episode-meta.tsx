@@ -5,7 +5,9 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import { toast } from "sonner"
+import { CircleAlert } from "lucide-react"
 
+import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -71,6 +73,18 @@ export function ContentStudioEpisodeMeta({
       onResolve={() => onResolveField?.(field)}
     />
   )
+  // Fields the import can't detect — it leaves them for the Editor. Mark each as
+  // a to-do while it's empty; the badge clears the moment it's filled.
+  const needsInput = (value: string | undefined) =>
+    value ? null : (
+      <Badge
+        variant="outline"
+        className="gap-1 border-amber-500/40 text-amber-600 dark:text-amber-500"
+      >
+        <CircleAlert />
+        Needs input
+      </Badge>
+    )
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: toDefaults(episode),
@@ -162,7 +176,10 @@ export function ContentStudioEpisodeMeta({
             >
               <div className="flex items-center justify-between gap-2">
                 <Label htmlFor="e-airdate">Air date</Label>
-                {noteBadge("Air date")}
+                <div className="flex items-center gap-1.5">
+                  {needsInput(form.watch("airDate"))}
+                  {noteBadge("Air date")}
+                </div>
               </div>
               <Input id="e-airdate" type="date" {...form.register("airDate")} />
             </div>
@@ -228,7 +245,10 @@ export function ContentStudioEpisodeMeta({
           >
             <div className="flex items-center justify-between gap-2">
               <Label htmlFor="e-guests">Guest stars</Label>
-              {noteBadge("Guest stars")}
+              <div className="flex items-center gap-1.5">
+                {needsInput(form.watch("guestStars"))}
+                {noteBadge("Guest stars")}
+              </div>
             </div>
             <Input
               id="e-guests"

@@ -61,6 +61,9 @@ export function ImagePickerDialog({
   const { data: items = [] } = useMediaForTitle(titleId)
   const create = useCreateRow("media", "md")
   const [uploading, setUploading] = useState(false)
+  // Local selection — picking a tile or uploading only *previews* the choice;
+  // it's applied to the thumbnail when the user confirms.
+  const [selectedId, setSelectedId] = useState<string | null>(currentMediaId)
 
   const uploadSample = async () => {
     setUploading(true)
@@ -71,14 +74,19 @@ export function ImagePickerDialog({
         kind: "art",
         titleId,
       })
-      onPick(created.id)
-      toast.success("Image uploaded and selected")
-      onOpenChange(false)
+      // Show it as the freshly-uploaded, selected image — confirm applies it.
+      setSelectedId(created.id)
+      toast.success("Image uploaded — confirm to apply")
     } catch {
       toast.error("Couldn't add the image")
     } finally {
       setUploading(false)
     }
+  }
+
+  const confirm = () => {
+    onPick(selectedId)
+    onOpenChange(false)
   }
 
   return (
@@ -94,15 +102,12 @@ export function ImagePickerDialog({
         <div className="grid max-h-[55vh] grid-cols-2 gap-3 overflow-y-auto sm:grid-cols-3">
           {items.map((m) => {
             const src = mediaUrl(m.url, "w342")
-            const selected = m.id === currentMediaId
+            const selected = m.id === selectedId
             return (
               <button
                 key={m.id}
                 type="button"
-                onClick={() => {
-                  onPick(m.id)
-                  onOpenChange(false)
-                }}
+                onClick={() => setSelectedId(m.id)}
                 className={cn(
                   "group relative aspect-video w-full overflow-hidden rounded-md bg-muted ring-1 transition-all",
                   selected
@@ -161,13 +166,19 @@ export function ImagePickerDialog({
           >
             Use title poster
           </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => onOpenChange(false)}
-          >
-            Cancel
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => onOpenChange(false)}
+            >
+              Cancel
+            </Button>
+            <Button size="sm" disabled={!selectedId} onClick={confirm}>
+              <Check />
+              Confirm
+            </Button>
+          </div>
         </DialogFooter>
       </DialogContent>
     </Dialog>

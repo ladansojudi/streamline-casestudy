@@ -39,7 +39,7 @@ const BETS: Bet[] = [
     n: 3,
     title: "In-flow audience segmentation",
     desc: "Build segments inside the flow; a required default → no blanks.",
-    href: "/content-studio/t_stranger?tour=audience",
+    href: "/audiences",
   },
   {
     n: 4,
