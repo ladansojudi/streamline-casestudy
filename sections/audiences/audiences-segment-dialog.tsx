@@ -4,7 +4,7 @@ import { useEffect } from "react"
 import { useForm, useFieldArray } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
-import { Plus, Trash2 } from "lucide-react"
+import { Plus, Trash2, Users } from "lucide-react"
 import { toast } from "sonner"
 
 import { Button } from "@/components/ui/button"
@@ -251,6 +251,24 @@ export function AudiencesSegmentDialog({
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex flex-col gap-4"
       >
+        {/* The app's estimate — prominent and live; updates as you add kind + rules */}
+        <div className="flex items-center justify-between rounded-lg border border-primary/20 bg-primary/5 px-4 py-3">
+          <div className="flex items-center gap-2.5">
+            <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+              <Users className="size-5" />
+            </span>
+            <div className="leading-tight">
+              <p className="text-sm font-medium">Estimated reach</p>
+              <p className="text-xs text-muted-foreground">
+                ≈ {membersLabel} · from the kind and your rules
+              </p>
+            </div>
+          </div>
+          <p className="text-2xl font-semibold tabular-nums text-primary">
+            {estimatedReach}%
+          </p>
+        </div>
+
         <div className="grid gap-1.5">
           <Label htmlFor="name">Name</Label>
           <Input id="name" {...form.register("name")} placeholder="e.g. EMEA" />
@@ -412,22 +430,6 @@ export function AudiencesSegmentDialog({
           {fieldError("rules") ? (
             <p className="text-xs text-destructive">{fieldError("rules")}</p>
           ) : null}
-        </div>
-
-        {/* The app's estimate — updates live as you add kind + rules */}
-        <div className="flex items-center justify-between rounded-md border border-border bg-muted/40 px-3 py-2.5">
-          <div className="leading-tight">
-            <p className="text-sm font-medium">Estimated reach</p>
-            <p className="text-xs text-muted-foreground">
-              Worked out from the kind and your rules.
-            </p>
-          </div>
-          <div className="text-right leading-tight">
-            <p className="text-lg font-semibold tabular-nums">
-              {estimatedReach}%
-            </p>
-            <p className="text-xs text-muted-foreground">≈ {membersLabel}</p>
-          </div>
         </div>
       </form>
 

@@ -5,8 +5,17 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import { toast } from "sonner"
-import { CircleAlert } from "lucide-react"
+import {
+  CheckCircle2,
+  CircleAlert,
+  Clapperboard,
+  Loader2,
+  Lock,
+  MessageSquare,
+  type LucideIcon,
+} from "lucide-react"
 
+import { cn } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
@@ -56,6 +65,80 @@ const toDefaults = (episode: EpisodeView): FormValues => ({
   writers: episode.writers ?? "",
   guestStars: episode.guestStars ?? "",
 })
+
+/** Prominent status read-out for an open episode: where it is + what's next. */
+type StatusVisual = {
+  label: string
+  hint: string
+  Icon: LucideIcon
+  className: string
+  spin?: boolean
+}
+
+function episodeStatusVisual(episode: EpisodeView): StatusVisual {
+  // "Everything" is the catch-all placeholder for a brand-new draft.
+  const items = episode.missing.filter((m) => m && m !== "Everything")
+  switch (episode.status) {
+    case "uploading":
+      return {
+        label: `Uploading · ${episode.uploadProgress}%`,
+        hint: "Files are still transferring — metadata can wait until they finish.",
+        Icon: Loader2,
+        spin: true,
+        className: "border-sky-500/30 bg-sky-500/10 text-sky-700 dark:text-sky-400",
+      }
+    case "draft":
+      return {
+        label: "Draft",
+        hint:
+          items.length > 0
+            ? `Still to add: ${items.join(", ")}.`
+            : "Add the files and fill in the metadata to get started.",
+        Icon: Clapperboard,
+        className: "border-border bg-muted/50 text-muted-foreground",
+      }
+    case "ready":
+      return items.length > 0
+        ? {
+            label: `Ready · ${items.length} to prep`,
+            hint: `Still to add: ${items.join(", ")}.`,
+            Icon: CircleAlert,
+            className:
+              "border-amber-500/30 bg-amber-500/10 text-amber-700 dark:text-amber-500",
+          }
+        : {
+            label: "Ready to submit",
+            hint: "Everything's filled in. Submit the title for review when you're done.",
+            Icon: CheckCircle2,
+            className:
+              "border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-500",
+          }
+    case "in-review":
+      return {
+        label: "In review",
+        hint: "With the Publisher — locked for edits until it's returned.",
+        Icon: Lock,
+        className:
+          "border-violet-500/30 bg-violet-500/10 text-violet-700 dark:text-violet-400",
+      }
+    case "changes":
+      return {
+        label: "Changes requested",
+        hint: "The Publisher left notes — fix the flagged fields, then resubmit.",
+        Icon: MessageSquare,
+        className:
+          "border-orange-500/30 bg-orange-500/10 text-orange-700 dark:text-orange-400",
+      }
+    case "published":
+      return {
+        label: "Published",
+        hint: "Live to audiences. Edits create a new version.",
+        Icon: CheckCircle2,
+        className:
+          "border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-500",
+      }
+  }
+}
 
 export function ContentStudioEpisodeMeta({
   episode,
@@ -107,6 +190,8 @@ export function ContentStudioEpisodeMeta({
   const err = (p: keyof FormValues) =>
     form.formState.errors[p]?.message as string | undefined
 
+  const status = episodeStatusVisual(episode)
+
   return (
     <Card>
       <CardHeader>
@@ -114,6 +199,21 @@ export function ContentStudioEpisodeMeta({
         <CardDescription>
           {episode.title.name} · {episode.code}
         </CardDescription>
+        {/* Where this episode is + what to do next — visible the moment it opens. */}
+        <div
+          className={cn(
+            "mt-1 flex items-start gap-2.5 rounded-md border px-3 py-2.5",
+            status.className
+          )}
+        >
+          <status.Icon
+            className={cn("mt-0.5 size-4 shrink-0", status.spin && "animate-spin")}
+          />
+          <div className="leading-tight">
+            <p className="text-sm font-semibold">{status.label}</p>
+            <p className="text-xs opacity-90">{status.hint}</p>
+          </div>
+        </div>
       </CardHeader>
       <CardContent>
         <form
