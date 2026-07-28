@@ -77,6 +77,6 @@ export const navSecondary: NavItem[] = [
 ]
 
 export const appMeta = {
-  name: "Insider One",
+  name: "Streamline",
   plan: "Studio",
 }

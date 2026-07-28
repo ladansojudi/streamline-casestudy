@@ -25,7 +25,7 @@ export const personas: Record<Role, Persona> = {
   publisher: personaForRole("publisher"),
 }
 
-const STORAGE_KEY = "insider-one:role"
+const STORAGE_KEY = "streamline:role"
 
 type RoleContextValue = {
   role: Role

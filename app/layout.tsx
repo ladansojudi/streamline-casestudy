@@ -11,8 +11,8 @@ const notoSans = Noto_Sans({subsets:['latin'],variable:'--font-sans'})
 const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono" })
 
 export const metadata: Metadata = {
-  title: "Insider One — Dashboard",
-  description: "Insider One case study dashboard.",
+  title: "Streamline — Dashboard",
+  description: "Streamline case study dashboard.",
 }
 
 export default function RootLayout({

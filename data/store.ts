@@ -4,7 +4,7 @@
  * The data/*.json files are immutable SEED data. On first load we snapshot them
  * into localStorage; all add/edit/delete operations read and write that copy,
  * leaving the seed pristine. Seed rows are protected from deletion. Clearing the
- * `insider-one:db` localStorage key (or calling resetStore) restores the seed.
+ * `streamline:db` localStorage key (or calling resetStore) restores the seed.
  *
  * CRUD functions are async so React Query can wrap them like a real API.
  */
@@ -46,7 +46,7 @@ export type DbState = {
 
 export type TableName = keyof DbState
 
-const STORAGE_KEY = "insider-one:db"
+const STORAGE_KEY = "streamline:db"
 
 function seedState(): DbState {
   return structuredClone({
